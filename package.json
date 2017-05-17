@@ -1,0 +1,15 @@
+{
+  "name": "gaggle",
+  "version": "0.0.1",
+  "description": "A graphical adventure game engine",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Shape Shifter",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^1.4.1",
+    "sanitize-html": "1.14.1"
+  }
+}

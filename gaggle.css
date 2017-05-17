@@ -1,0 +1,105 @@
+
+.w3-col>img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+.w3-col {
+    height: 100%;
+    overflow: auto;
+    padding: 8px;
+    outline: 1px solid lightgray;
+}
+
+.list-item {
+    width: 100%;
+    text-align: left;
+}
+
+html, body {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+#main-row {
+    height: calc(60% - 2em);
+}
+
+#action-row {
+    height: 40%;
+    bottom: 2em;
+    width: 100%
+}
+
+#footer-row {
+    height: 2em;
+    padding: .2em 10px .2em 10px;
+    bottom: 0;
+}
+
+#footer-row label:not(:last-of-type)::after {
+    content: "\00A0\00A0\2502\00A0\00A0";
+    color: lightgray;
+}
+
+#player-area {
+    background-image: url('man.png');
+}
+
+#room-area {
+    background-image: url('compass.png');
+}
+
+.imgcell {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-origin: border-box;
+    position: relative;
+    border: 5px solid #DDDDDD;
+}
+
+.hasActions {
+    border: 5px solid dodgerblue;
+}
+
+#room-area * {
+    position: absolute;
+    width: 3em;
+}
+
+#room-area .top {
+    top: 0;
+}
+
+#room-area .bottom {
+    bottom: 0;
+}
+
+#room-area .left {
+    left: 0;
+}
+
+#room-area .right {
+    right: 0;
+}
+
+#room-area .hcenter {
+    left: calc(50% - 1.5em);
+}
+
+#room-area .vcenter {
+    top: calc(50% - 1em);
+}
+
+.list-header {
+    margin: 0px;
+}
+
+.w3-col button {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}

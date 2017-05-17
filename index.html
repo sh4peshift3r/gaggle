@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>GAGGLE</title>
+    <link rel="stylesheet" type="text/css" href="w3.css">
+    <link rel="stylesheet" type="text/css" href="gaggle.css"/>
+  </head>
+  <body>
+    <div class="w3-row" id="main-row">
+      <div id="main-text" class="w3-col s5 w3-container">
+        <h1>GAGGLE</h1>
+        <p>Welcome to the castle!</p>
+      </div>
+
+      <div id="image-area" class="w3-col s7">
+        <img src="castle.jpg"/>
+      </div>
+
+    </div>
+    <div class="w3-row" id="action-row">
+      <div id="player-area" class="w3-col s3 imgcell">
+      </div>
+
+      <div id="inventory-area" class="w3-col s3">
+        <h4 class="list-header">Inventory</h4>
+        <button class="list-item w3-button">Inventory Item 1</button>
+        <button class="list-item w3-button">Inventory Item 1</button>
+        <button class="list-item w3-button">Inventory Item 1</button>
+        <button class="list-item w3-button">Inventory Item 1</button>
+      </div>
+
+      <div id="visible-area" class="w3-col s3">
+        <h4 class="list-header">Outside the castle</h4>
+        <button class="list-item w3-button">Room Item 1</button>
+      </div>
+
+      <div id="room-area" class="w3-col s3 imgcell">
+        <button id="NW" class="direction top left">NW</button>
+        <button id="N" class="direction top hcenter">N</button>
+        <button id="NE" class="direction top right">NE</button>
+        <button id="W" class="direction vcenter left">W</button>
+        <button id="E" class="direction vcenter right">E</button>
+        <button id="SW" class="direction bottom left">SW</button>
+        <button id="S" class="direction bottom hcenter">S</button>
+        <button id="SE" class="direction bottom right">SE</button>
+      </div>
+
+    </div>
+    <div id="footer-row"">
+      <label>Name: Player</label>
+      <label id="current-time">Time:</label>
+      <label>Level: 4</label>
+    </div>
+  </body>
+
+  <script>
+    require('./renderer.js')
+
+  </script>
+</html>
