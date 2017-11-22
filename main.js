@@ -8,6 +8,10 @@ exports.getMainWindow = () => {
     return mainWindow
 }
 
+exports.windowMessage = (msg) => {
+    mainWindow.webContents.send(msg, data)
+}
+
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 800,
@@ -45,4 +49,3 @@ app.on('activate', function() {
 })
 
 require('./menu.js')
-require('./game.js')

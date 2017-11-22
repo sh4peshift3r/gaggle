@@ -1,30 +1,37 @@
 const {app, Menu, dialog} = require('electron')
 const {getMainWindow} = require('./main.js')
+const {loadGame, initGame} = require('./game.js')
 
-function chooseOpenGame() {
-    dialog.showOpenDialog(getMainWindow(), {
-        title: 'Select a game folder',
-        properties: ['openDirectory']})
+
+function newGameMenu() {
+    modulePath = dialog.showOpenDialog(getMainWindow(), {
+        title: 'Select a game to open',
+        properties: ['openDirectory', 'openFile']})
+    if(modulePath && modulePath.length === 1) {
+        loadGame(modulePath[0])
+        initGame()
+    }
 }
 
-function saveGame() {
-    dialog.showSaveDialog(getMainWindow(), {
+function saveGameMenu() {
+    fn = dialog.showSaveDialog(getMainWindow(), {
         title: 'Save your current game'})
 }
 
-function loadGame() {
-    dialog.showOpenDialog(getMainWindow(), {
+function loadGameMenu() {
+    fn = dialog.showOpenDialog(getMainWindow(), {
         title: 'Load a saved game',
-        properties: ['openFile']}) 
+        properties: ['openFile']
+    })
 }
 
 const template = [
     {
         label: 'File',
         submenu: [
-            { label: 'Open game', click: chooseOpenGame },
-            { label: 'Save game', click: saveGame },
-            { label: 'Load game', click: loadGame },
+            { label: 'New game', click: newGameMenu, accelerator: 'CmdOrCtrl+N' },
+            { label: 'Save game', click: saveGameMenu },
+            { label: 'Load game', click: loadGameMenu },
             { role: 'close' }
         ]
     },

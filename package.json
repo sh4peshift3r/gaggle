@@ -7,9 +7,14 @@
     "start": "electron ."
   },
   "author": "Shape Shifter",
+  "repository" : {
+    "type": "git",
+    "url" : "https://github.com/sh4peshift3r/gaggle.git"
+  },
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^1.4.1",
-    "sanitize-html": "1.14.1"
+    "sanitize-html": "1.14.1",
+    "vm2": "3.4.6"
   }
 }

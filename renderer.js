@@ -34,13 +34,14 @@ window.addEventListener('keyup', () => {
     }
 })
 
-document.getElementById('player-area').addEventListener('click', toggleBorder)
-document.getElementById('room-area').addEventListener('click', toggleBorder)
-
 ipcRenderer.on('print-text', (event, arg) => {
     add_p(arg)
-} )
+})
+
+ipcRenderer.on('clear-text', (event) => {
+    document.getElementById('main-text').innerHTML = ""
+})
 
 ipcRenderer.on('show-image', (event, arg) => {
     document.querySelector('#image-area img').src = arg
-} )
+})
