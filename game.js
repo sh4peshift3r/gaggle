@@ -6,12 +6,12 @@ const {VM, VMScript} = require('vm2')
 const path = require('path')
 const fs = require('fs')
 
+let sandbox
+let vm
+
 const {Room} = require('./room.js')
 const {Item} = require('./item.js')
 const {Player} = require('./player.js')
-
-let sandbox
-let vm
 
 class Game
 {
@@ -62,7 +62,7 @@ exports.loadGame = function(modulePath)
 
     vm = new VM({sandbox})
 
-    getMainWindow().webContents.send('clear-text')
+    windowMessage('clear-text')
 
     ext = path.extname(modulePath)
     if(ext === '.js') {
@@ -85,4 +85,13 @@ exports.loadGame = function(modulePath)
 exports.initGame = function()
 {
     vm.run('initialize()')
+}
+
+
+
+exports.userAction = function(action)
+{
+    windowMessage('disableui')
+    action()
+    windowMessage('enableui')
 }

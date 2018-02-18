@@ -1,3 +1,5 @@
+const {sandbox} = require('./game')
+
 directions = {
     'N': 'S',
     'NE': 'SW',
