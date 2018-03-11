@@ -1,6 +1,6 @@
-const {sandbox} = require('./game')
+const game = require('./game')
 
-directions = {
+reverseDirections = {
     'N': 'S',
     'NE': 'SW',
     'E': 'W',
@@ -11,35 +11,47 @@ directions = {
     'NW': 'SE'
 }
 
-class Room
+module.exports = class Room
 {
-    constructor(args) {
+    constructor(name, args) {
+        this.name = name
         this.connections = {}
+        Object.assign(this, this.getDefaults())
         Object.assign(this, args)
     }
 
+    getDefaults() {
+        return {}
+    }
+
     connect(room, direction, backDirection=undefined) {
+        direction = direction.toUpperCase()
+
         if(backDirection === undefined) {
             backDirection = reverseDirections[direction]
         }
 
         this.connections[direction] = room
         if(backDirection) {
-            room.connections[backDirection] = this
+            game.world[room].connections[backDirection] = this.name
         }
+        return this
     }
 
-    describe(room) {
-        if(this.description) {
-            sandbox.game.print(this.description)
+    describe() {
+        game.win.printText(this.description)
+    }
+
+    examine() {
+        if(this.image) {
+            game.win.showImage(this.image)
         }
+        
+        this.describe()
     }
 
     onPlayerEnter() {
-        if(this.image) {
-            sandbox.game.showImage(this.image)
-        }
-        
+        game.win.showImage(this.image)
         this.describe()
     }
 }

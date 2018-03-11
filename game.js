@@ -1,97 +1,70 @@
 
-const {ipcMain} = require('electron')
-const {getMainWindow, windowMessage} = require('./main.js')
-const sanitizeHtml = require('sanitize-html');
-const {VM, VMScript} = require('vm2')
+const {getMainWindow} = require('./main.js')
+const {WindowCommands} = require('./window.js')
+const {VM} = require('vm2')
 const path = require('path')
 const fs = require('fs')
 
-let sandbox
-let vm
-
-const {Room} = require('./room.js')
-const {Item} = require('./item.js')
-const {Player} = require('./player.js')
-
-class Game
-{
-    constructor(rootDir='.') {
-        this.rootDir = rootDir
-        this.world = {}
-    }
-
-    print(text) {
-        text = sanitizeHtml(text)
-        windowMessage('print-text', text)
-    }
-
-    showImage(img) {
-        windowMessage('show-image', this.relPath(img))
-    }
-
-    relPath(p) {
-        var mp = path.join(this.rootDir, p)
-        if(fs.existsSync(mp)) {
-            return mp
-        }
-        
-        return p
-    }
-}
 
 function loadFile(fn)
 {
     console.log('loading ' + fn)
-    vm.run(fs.readFileSync(fn, {encoding: 'utf8'}))
+    exports.vm.run(fs.readFileSync(fn, {encoding: 'utf8'}))
 }
+
+
+exports.create = function(type, name, args)
+{
+    obj = new type(name, args)
+    exports.world[name] = obj
+    return obj
+}
+
 
 exports.loadGame = function(modulePath)
 {
-    game = new Game()
-    player = new Player()
+    mainWindow = getMainWindow()
+    Room = require('./room.js')
+    Item = require('./item.js')
+    Player = require('./player.js')
+
+    exports.player = new Player()
+    exports.world = {}
+    exports.win = new WindowCommands(mainWindow.webContents)
 
     sandbox = {
         modulePath,
         console,
         Room,
         Item,
-        player,
-        game,
-        world: game.world
+        'create': exports.create,
+        'player': exports.player,
+        'world': exports.world,
+        'win': exports.win,
     }
 
-    vm = new VM({sandbox})
+    exports.vm = new VM({sandbox})
 
-    windowMessage('clear-text')
-
+    exports.win.clearText()
+    
     ext = path.extname(modulePath)
     if(ext === '.js') {
-        sandbox.game.rootDir = path.dirname(modulePath)
+        mainWindow.webContents.send('setRoot', path.dirname(modulePath))
         loadFile(modulePath)
-    }
+    } 
     else if(fs.statSync(modulePath).isDirectory()) {
-        sandbox.game.rootDir = modulePath
-        files = fs.readdirSync(modulePath)
-        for(var i=0; i<files.length; i++) {
-            fn = path.join(modulePath, files[i])
-            ext = path.extname(fn)
-            if(ext === '.js') {
-                loadFile(fn) 
+        mainWindow.webContents.send('setRoot', modulePath)
+        for(var file of fs.readdirSync(modulePath)) {
+            if(path.extname(file) === '.js') {
+                loadFile(path.join(modulePath, file)) 
             }
         }
     }
 }
 
+
 exports.initGame = function()
 {
-    vm.run('initialize()')
+    exports.vm.run('initialize()')
 }
 
-
-
-exports.userAction = function(action)
-{
-    windowMessage('disableui')
-    action()
-    windowMessage('enableui')
-}

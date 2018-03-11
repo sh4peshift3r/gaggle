@@ -1,5 +1,10 @@
-
 const { ipcRenderer } = require('electron')
+const sanitizeHtml = require('sanitize-html')
+const path = require('path')
+const fs = require('fs')
+
+
+let rootDir = '.'
 
 function add_p(text) {
     p = document.createElement('p')
@@ -10,6 +15,7 @@ function add_p(text) {
 
 function direction(d) {
     ipcRenderer.send('direction-chosen', d)
+
 } 
 
 directions = document.getElementsByClassName("direction")
@@ -17,7 +23,7 @@ for (i=0; i<directions.length; i++) {
     d = directions[i]
     d.addEventListener("click", function() {
         direction(this.id)
-        event.stopPropagation()    
+        event.stopPropagation()
     })
 }
 
@@ -34,14 +40,46 @@ window.addEventListener('keyup', () => {
     }
 })
 
-ipcRenderer.on('print-text', (event, arg) => {
-    add_p(arg)
+function relPath(p) {
+    var mp = path.join(rootDir, p)
+    if(fs.existsSync(mp)) {
+        return mp
+    }    
+    return p
+}
+
+ipcRenderer.on('setRoot', (event, dir) => {
+    rootDir = dir
 })
 
-ipcRenderer.on('clear-text', (event) => {
+ipcRenderer.on('printText', (event, text) => {
+    if(text) {
+        console.log(event, text)
+        add_p(sanitizeHtml(text))
+    }
+})
+
+ipcRenderer.on('clearText', (event) => {
     document.getElementById('main-text').innerHTML = ""
 })
 
-ipcRenderer.on('show-image', (event, arg) => {
-    document.querySelector('#image-area img').src = arg
+ipcRenderer.on('showImage', (event, img) => {
+    document.querySelector('#image-area img').src = relPath(img)
+})
+
+ipcRenderer.on('updateInventory', (event, items) => {
+    inventory = document.getElementById('inventory-area')
+    inventory.innerHTML = ""
+
+    h = document.createElement('h4')
+    h.className = 'list-header'
+    h.innerHTML = 'Inventory'
+    inventory.appendChild(h)
+
+    for (i of items) {
+        b = document.createElement('button')
+        b.className = 'list-item w3-button'
+        b.innerHTML = i
+        inventory.appendChild(b)
+    }
 })

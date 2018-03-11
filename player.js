@@ -1,11 +1,18 @@
-class Player
+const game = require('./game.js')
+
+
+module.exports = class Player
 {
+	constructor() {
+		this.name = 'player'
+    }
+
     moveTo(room) {
-        this.room = room
-        this.room.onPlayerEnter()
+        game.world[room].onPlayerEnter()
+    	this.room = room
     }
 
     travel(direction) {
-        this.moveTo(this.room.connections[direction])
+        this.moveTo(game.world[this.room].connections[direction])
     }
 }

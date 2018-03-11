@@ -32,6 +32,7 @@ const template = [
             { label: 'New game', click: newGameMenu, accelerator: 'CmdOrCtrl+N' },
             { label: 'Save game', click: saveGameMenu },
             { label: 'Load game', click: loadGameMenu },
+            { role: 'reload' },
             { role: 'close' }
         ]
     },
@@ -58,3 +59,4 @@ const template = [
 
 const mainMenu = Menu.buildFromTemplate(template)
 Menu.setApplicationMenu(mainMenu)
+

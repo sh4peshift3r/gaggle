@@ -1,35 +1,39 @@
-const {app, BrowserWindow} = require('electron')
+const {app} = require('electron')
 const path = require('path')
 const url = require('url')
 
+const {createWindow} = require('./window.js')
+
 let mainWindow
 
-exports.getMainWindow = () => {
+exports.getMainWindow = function() {
     return mainWindow
 }
 
-exports.windowMessage = (msg) => {
-    mainWindow.webContents.send(msg, data)
-}
 
-function createWindow() {
-    mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600
-    })
+function start() {
+
+    mainWindow = createWindow()
+
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
         slashes: true
     }))
 
-    // Emitted when the window is closed.
-    mainWindow.on('closed', function() {
-        mainWindow = null
+    mainWindow.on('closed', () => { mainWindow = null })
+
+    mainWindow.webContents.on('did-finish-load', () => {
+        // DEBUG ONLY        
+        mainWindow.webContents.send('printText', 'foobar')
+        game = require('./game.js')
+        game.loadGame('testgame')
+        game.initGame()
     })
 }
 
-app.on('ready', createWindow)
+
+app.on('ready', start)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
@@ -44,7 +48,7 @@ app.on('activate', function() {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
-        createWindow()
+        start()
     }
 })
 

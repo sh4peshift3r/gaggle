@@ -1,18 +1,24 @@
 
 function initialize()
 {
-	game.print('Welcome to the castle!')
-	// game.showImage('castle.jpg')
+    win.printText('Welcome to the castle!')
 
-	world.courtyard = new Room({
-		image: 'castle.jpg'
-	})
-	
-	world.entranceRoom = new Room()
-	world.welcomeHall = new Room()
+    create(Room, 'courtyard', {
+        image: 'castle.jpg',
+        description: 'You are standing in the courtyard'
+    })
 
-	world.courtyard.connect('entranceRoom', 'N')
-	world.entranceRoom.connect('welcomeHall', 'N')
+    create(Room, 'entranceRoom')
+    	.connect('courtyard', 'S')
 
-	player.moveTo('courtyard')
+    create(Room, 'welcomeHall')
+    	.connect('entranceRoom', 'S')
+
+    create(Item, 'chalice', {
+    	description: 'A golden chalice',
+    	image: 'chalice.jpg'
+    }).moveTo('welcomeHall')
+    
+    player.moveTo('courtyard')
+
 }
